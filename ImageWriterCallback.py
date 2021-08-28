@@ -35,7 +35,7 @@ class ImageWriterCallback(tf.keras.callbacks.Callback):
         # plt.imshow(generated_images,cmap='gray',vmin=-1,vmax=1)
         # plt.show()
         self.gif_images.append(((generated_images+1)*127.5).astype('uint8'))
-        cv2.imwrite(os.path.join(self.log_dir,'generated_images.png'),self.gif_images[-1])
+        cv2.imwrite(os.path.join(self.log_dir, 'images/generated_images.png'), self.gif_images[-1])
 
         with self.tensorboard_writer.as_default():
             tf.summary.image('generated images',generated_images.reshape((-1,self.amount_of_rows_cols*height,self.amount_of_rows_cols*width,1)),max_outputs=1,step=epoch)

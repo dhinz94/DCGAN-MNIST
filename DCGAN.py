@@ -103,6 +103,8 @@ class DCGAN(tf.keras.Model):
         super(DCGAN, self).compile()
         pass
 
+    def call(self, noise):
+        pass
 
     def generate_images(self, noise):
         return self.generator(noise)

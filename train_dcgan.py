@@ -29,6 +29,6 @@ os.makedirs(log_dir+'/images')
 
 tensorboard_callback=tf.keras.callbacks.TensorBoard(log_dir)
 image_writer_callback=ImageWriterCallback(log_dir+'/images')
-dcgan.fit(generator,epochs=10,callbacks=[tensorboard_callback,image_writer_callback])
+dcgan.fit(generator,epochs=50,callbacks=[tensorboard_callback,image_writer_callback])
 
 
