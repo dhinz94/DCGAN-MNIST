@@ -27,7 +27,6 @@ Supervise generated images for each epoch:
 
 In addition to the log-files for TensorBoard a **png-file** of the generated images in the final epoch and an animated **gif-file** of the generated images in each epoch is saved in the image folder of the log-directory after the completion of the final epoch. 
 
->test hallo
 
  
 
