@@ -9,7 +9,7 @@ Generated images from DCGAN:
 
 Generated images from DCGAN during training:
 
-![](images/train.gif)
+![](images/train.gif) 
 
 
 
