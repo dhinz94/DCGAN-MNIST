@@ -11,5 +11,5 @@ Generated images from DCGAN during training:
 
 ![](images/train.gif) 
 
-
+ 
 
