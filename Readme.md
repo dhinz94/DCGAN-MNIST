@@ -7,7 +7,7 @@ Generated images from DCGAN:
 ![](images/generated_images.png)
 
 
-Generated images from DCGAN during training:
+Generated images from DCGAN during training epochs:
 
 ![](images/train.gif) 
 
