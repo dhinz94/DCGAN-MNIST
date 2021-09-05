@@ -7,9 +7,10 @@ import datetime
 import os
 from ImageWriterCallback import ImageWriterCallback
 
-(x_train, y_train), (x_test, y_test)=tf.keras.datasets.mnist.load_data()
+(x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
+# (x_train, y_train), (x_test, y_test) = tf.keras.datasets.fashion_mnist.load_data()
 
-generator=Generator(images=x_train,batch_size=16)
+generator = Generator(images=x_train, batch_size=16, conditions=y_train)
 
 # plt.figure()
 # for i in range(4*4):
@@ -18,17 +19,15 @@ generator=Generator(images=x_train,batch_size=16)
 # plt.show()
 
 
-dcgan=DCGAN()
+dcgan = DCGAN(conditional=False)
 dcgan.print_model_summary()
 dcgan.compile()
 
-time_stamp=datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
-log_dir='./logs/'+time_stamp
+time_stamp = datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
+log_dir = './logs/' + time_stamp
 os.makedirs(log_dir)
-os.makedirs(log_dir+'/images')
+os.makedirs(log_dir + '/images')
 
-tensorboard_callback=tf.keras.callbacks.TensorBoard(log_dir)
-image_writer_callback=ImageWriterCallback(log_dir+'/images')
-history=dcgan.fit(generator,epochs=50,callbacks=[tensorboard_callback,image_writer_callback])
-
-
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir)
+image_writer_callback = ImageWriterCallback(log_dir + '/images')
+history = dcgan.fit(generator, epochs=50, callbacks=[tensorboard_callback, image_writer_callback])
