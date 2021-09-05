@@ -10,6 +10,7 @@ Generated images from DCGAN:
 
 Generated images from DCGAN during training epochs:
 
+![](images/train_mnist.gif) 
 ![](images/train_fashion_mnist.gif) 
 
 As you can see in the images above, the generator does not generate all classes in the dataset equally. For example in the generated images of the fashion mnist dataset you can see, that no shoes are generated. This is a known issue when training GANs. To force the generator to generate all classes of a dataset it is possible to train the GAN with class conditions. The results of this Conditional DCGAN are shown below. 
