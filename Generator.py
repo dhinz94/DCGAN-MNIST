@@ -27,7 +27,7 @@ class Generator(tf.keras.utils.Sequence):
             conditions_batch = np.eye(10)[conditions_batch].astype('float32')
             return (images_batch, conditions_batch)
         else:
-            return (images_batch)
+            return (images_batch,)
 
     def on_epoch_end(self):
         p = np.random.permutation(len(self.images))
