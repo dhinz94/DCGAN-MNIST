@@ -12,8 +12,8 @@ from ModelSaveCallback import ModelSaveCallback
 # (x_train, y_train), (x_test, y_test) = tf.keras.datasets.fashion_mnist.load_data()
 # generator = Generator(images=x_train, batch_size=16, conditions=y_train)
 
-x_train=np.load('./data/celeba_128.npy')
-generator = Generator(images=x_train, batch_size=16, conditions=None)
+x_train=np.load('./data/celeba.npy')
+generator = Generator(images=x_train, batch_size=64, conditions=None)
 
 # plt.figure()
 # for i in range(4*4):
@@ -37,4 +37,3 @@ model_save_callback = ModelSaveCallback(log_dir)
 dcgan.print_model_summary()
 dcgan.compile(run_eagerly=False)
 history = dcgan.fit(generator, epochs=75, callbacks=[tensorboard_callback, image_writer_callback,model_save_callback])
-dcgan.save_models('./')

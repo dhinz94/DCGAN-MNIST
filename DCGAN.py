@@ -36,8 +36,8 @@ class DCGAN(tf.keras.Model):
         self.generator = self.get_big_generator()
         self.discriminator = self.get_big_discriminator()
 
-        self.discriminator_optimizer = tf.keras.optimizers.Adam(learning_rate=1e-4, beta_1=0.5)
-        self.generator_optimizer = tf.keras.optimizers.Adam(learning_rate=1e-4, beta_1=0.5)
+        self.discriminator_optimizer = tf.keras.optimizers.Adam(learning_rate=5e-4, beta_1=0.5)
+        self.generator_optimizer = tf.keras.optimizers.Adam(learning_rate=5e-4, beta_1=0.5)
 
     def save_models(self, path):
         self.generator.save(os.path.join(path, 'generator.h5'))
@@ -61,7 +61,7 @@ class DCGAN(tf.keras.Model):
 
         # loss = -K.mean(discriminator_output_fake)
 
-        loss=K.mean(tf.nn.softplus(-discriminator_output_fake))
+        loss = K.mean(tf.nn.softplus(-discriminator_output_fake))
         return loss
 
     def dis_loss(self, discriminator_output_real, discriminator_output_fake):
@@ -73,7 +73,6 @@ class DCGAN(tf.keras.Model):
         # loss = (fake_loss + real_loss) / 2
 
         # loss = K.mean(discriminator_output_fake) - K.mean(discriminator_output_real)
-
 
         loss = K.mean(tf.nn.softplus(discriminator_output_fake)) + K.mean(tf.nn.softplus(-discriminator_output_real))
         return loss
@@ -255,12 +254,12 @@ class DCGAN(tf.keras.Model):
         # x64 = Conv2D(3, kernel_size=(3, 3), padding='same', activation=None, kernel_initializer=self.initializer)(x)
         # # x64 = Activation('tanh')(x64)
 
-        # for 128
-        x8 = UpSampling2D(interpolation=interpolation, size=(16, 16))(x8)
-        x16 = UpSampling2D(interpolation=interpolation, size=(8, 8))(x16)
-        x32 = UpSampling2D(interpolation=interpolation, size=(4, 4))(x32)
-        x64 = UpSampling2D(interpolation=interpolation, size=(2, 2))(x64)
-        output = Add()([x8, x16, x32, x64, x128])
+        # # for 128
+        # x8 = UpSampling2D(interpolation=interpolation, size=(16, 16))(x8)
+        # x16 = UpSampling2D(interpolation=interpolation, size=(8, 8))(x16)
+        # x32 = UpSampling2D(interpolation=interpolation, size=(4, 4))(x32)
+        # x64 = UpSampling2D(interpolation=interpolation, size=(2, 2))(x64)
+        # output = Add()([x8, x16, x32, x64, x128])
 
         # # for 64
         # x8 = UpSampling2D(interpolation=interpolation, size=(8, 8))(x8)
@@ -268,7 +267,7 @@ class DCGAN(tf.keras.Model):
         # x32 = UpSampling2D(interpolation=interpolation, size=(2, 2))(x32)
         # output = Add()([x8, x16, x32, x64])
 
-        output = Activation('tanh')(output)
+        output = Activation('tanh')(x64)
 
         model = tf.keras.Model(inputs=inp_latent, outputs=output)
 
@@ -277,24 +276,24 @@ class DCGAN(tf.keras.Model):
     def get_big_discriminator(self):
         start_filters = 32
 
-        inp_image = Input(shape=(128, 128, 3))
-        inp_image_64 = AveragePooling2D(pool_size=(2, 2))(inp_image)
-        inp_image_32 = AveragePooling2D(pool_size=(4, 4))(inp_image)
-        inp_image_16 = AveragePooling2D(pool_size=(8, 8))(inp_image)
-        inp_image_8 = AveragePooling2D(pool_size=(16, 16))(inp_image)
-        inp_image_4 = AveragePooling2D(pool_size=(32, 32))(inp_image)
+        # inp_image = Input(shape=(128, 128, 3))
+        # inp_image_64 = AveragePooling2D(pool_size=(2, 2))(inp_image)
+        # inp_image_32 = AveragePooling2D(pool_size=(4, 4))(inp_image)
+        # inp_image_16 = AveragePooling2D(pool_size=(8, 8))(inp_image)
+        # inp_image_8 = AveragePooling2D(pool_size=(16, 16))(inp_image)
+        # inp_image_4 = AveragePooling2D(pool_size=(32, 32))(inp_image)
 
-        # inp_image = Input(shape=(64, 64, 3))
-        # inp_image_32 = AveragePooling2D(pool_size=(2, 2))(inp_image)
-        # inp_image_16 = AveragePooling2D(pool_size=(4, 4))(inp_image)
-        # inp_image_8 = AveragePooling2D(pool_size=(8, 8))(inp_image)
-        # inp_image_4 = AveragePooling2D(pool_size=(16, 16))(inp_image)
+        inp_image = Input(shape=(64, 64, 3))
+        inp_image_32 = AveragePooling2D(pool_size=(2, 2))(inp_image)
+        inp_image_16 = AveragePooling2D(pool_size=(4, 4))(inp_image)
+        inp_image_8 = AveragePooling2D(pool_size=(8, 8))(inp_image)
+        inp_image_4 = AveragePooling2D(pool_size=(16, 16))(inp_image)
 
-        x = self.downsampling_block(inp_image, start_filters, dropout=True)  # 64x64
-        x = self.residual_block(x, start_filters, dropout=True)
-        x = Concatenate()([x, inp_image_64])
+        # x = self.downsampling_block(inp_image, start_filters, dropout=True)  # 64x64
+        # x = self.residual_block(x, start_filters, dropout=True)
+        # x = Concatenate()([x, inp_image_64])
 
-        x = self.downsampling_block(x, start_filters, dropout=True)  # 32x32
+        x = self.downsampling_block(inp_image, start_filters, dropout=True)  # 32x32
         x = self.residual_block(x, start_filters, dropout=True)
         x = Concatenate()([x, inp_image_32])
 
@@ -315,8 +314,6 @@ class DCGAN(tf.keras.Model):
         x = Dense(1, activation=None, kernel_initializer=self.initializer)(x)
         # x = Conv2D(1, kernel_size=(3, 3), padding='same', activation=None, kernel_initializer=self.initializer)(x)
         # x = Activation(tf.nn.sigmoid)(x) #comment out for linear activation
-
-
 
         model = tf.keras.Model(inputs=inp_image, outputs=x)
 
